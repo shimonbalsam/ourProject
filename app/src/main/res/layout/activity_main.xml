@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:stretchColumns="1">
+
+        <TableRow>
+            <TextView
+                android:background="#1199"
+                android:padding="8dp"
+                android:text="Inviting Private"
+                android:textColor="#332"
+                android:textAlignment="center"/>
+
+        </TableRow>
+        <TableRow>
+            Inviting Private
+            <TextView
+                android:background="#FF3F51B5"
+                android:padding="8dp"
+                android:text="First name"
+                android:textColor="#ffff" />
+
+            <EditText
+                android:id="@+id/editText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Name" />
+
+
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:background="#FF3F51B5"
+                android:padding="8dp"
+                android:text="Last name"
+                android:textColor="#ffff" />
+
+            <EditText
+                android:id="@+id/editText4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Name" />
+
+
+        </TableRow>
+        <TableRow>
+
+            <TextView
+                android:background="#FF3F51B5"
+                android:padding="8dp"
+                android:text="Addressee location"
+                android:textColor="#ffff" />
+
+            <EditText
+                android:id="@+id/editText3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPostalAddress" />
+
+        </TableRow>
+        <TableRow>
+
+            <TextView
+                android:background="#FF3F51B5"
+                android:padding="8dp"
+                android:text="Phone"
+                android:textColor="#ffff" />
+
+            <EditText
+                android:id="@+id/editText2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="phone" />
+
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:background="#1199"
+                android:padding="8dp"
+                android:text="Percil Details"
+                android:textColor="#332"
+                android:textAlignment="center"/>
+
+        </TableRow>
+        <TableRow>
+
+            <TextView
+                android:background="#FF3F51B5"
+                android:padding="8dp"
+                android:text="Parcel Address"
+                android:textColor="#ffff" />
+
+            <EditText
+                android:id="@+id/editText5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPostalAddress" />
+
+        </TableRow>
+        <TableRow>
+
+            <TextView
+                android:background="#FF3F51B5"
+                android:padding="8dp"
+                android:text="Parcel size"
+                android:textColor="#ffff" />
+
+            <RadioGroup>
+                <RadioButton
+                    android:id="@+id/radioButton1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="LARGE" />
+
+                <RadioButton
+                android:id="@+id/radioButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SMALL" />
+
+                <RadioButton
+                    android:id="@+id/radioButton3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ENVELOPE" />
+            </RadioGroup>
+
+
+
+
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:background="#FF3F51B5"
+                android:padding="8dp"
+                android:text="Parcel weight"
+                android:textColor="#ffff" />
+            <RadioGroup>
+                <RadioButton
+                    android:id="@+id/radioButton6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="UPTO500GR" />
+
+                <RadioButton
+                    android:id="@+id/radioButton7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="UPTOKG" />
+
+                <RadioButton
+                    android:id="@+id/radioButton8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="UPTO5KG" />
+                <RadioButton
+                    android:id="@+id/radioButton9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="UPTO20KG" />
+            </RadioGroup>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:background="#FF3F51B5"
+                android:padding="8dp"
+                android:text="Parcel fragile"
+                android:textColor="#ffff" />
+
+            <RadioGroup>
+                <RadioButton
+                    android:id="@+id/radioButton4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="FRAGILE" />
+
+                <RadioButton
+                    android:id="@+id/radioButton5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="NOTFRAGILEn" />
+
+
+            </RadioGroup>
+        </TableRow>
+    </TableLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
