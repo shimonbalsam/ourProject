@@ -1,3 +1,20 @@
 <resources>
-    <string name="app_name">ourProject</string>
+    <string name="app_name">save your detiles</string>
+    <string-array name="fragileparcel">
+        <item>FRAGILE</item>
+        <item>NONFRAGILE</item>
+    </string-array>
+    <string-array name="size">
+        <item>ENVELOPE</item>
+        <item>SMALL</item>
+        <item>LARGE</item>
+    </string-array>
+    <string-array name="weight">
+        <item>UPTO500GR</item>
+        <item>UPTOKG</item>
+        <item>UPTO5KG</item>
+        <item>UPTO20KG</item>
+    </string-array>
+
+
 </resources>
