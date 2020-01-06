@@ -68,8 +68,8 @@
                 android:text="Addressee location"
                 android:textColor="#ffff" />
 
-            <EditText
-                android:id="@+id/editText3"
+            <Button
+                android:id="@+id/Gps_bt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
