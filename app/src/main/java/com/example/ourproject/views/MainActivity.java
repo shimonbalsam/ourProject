@@ -1,4 +1,4 @@
-package com.example.ourproject;
+package com.example.ourproject.views;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -19,6 +19,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.example.ourproject.R;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -61,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                     thread.start();*/
 
                     location = getLastBestLocation();
-                    button.setText(" "+location.getLongitude()+" , "+location.getLatitude());
+                    button.setText(/*" "+location.getLongitude()+" , "+location.getLatitude()+" "+*/location.toString());
 
                 }
             }
