@@ -22,10 +22,22 @@ public class ParcelRepository {
         mParcelDao = db.parcelDao();
         mAllParcels = mParcelDao.getAllParcel();
     }
+    public void del(){
+        mParcelDao.deleteAll();
+    }
+
+
+    private static ParcelRepository instance;
+    public static ParcelRepository getInstance(Application application) {
+        if (instance == null)
+            instance = new ParcelRepository(application);
+        return instance;
+    }
 
     // Room executes all queries on a separate thread.
     // Observed LiveData will notify the observer when the data has changed.
     public LiveData<List<Parcel>> getAllParcels() {
+        mAllParcels = mParcelDao.getAllParcel();
         return mAllParcels;
     }
 
@@ -36,4 +48,6 @@ public class ParcelRepository {
             mParcelDao.insert(parcel);
         });
     }
+
+
 }

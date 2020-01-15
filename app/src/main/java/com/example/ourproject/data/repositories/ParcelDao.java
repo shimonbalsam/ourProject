@@ -15,7 +15,7 @@ import java.util.List;
 @Dao
 public interface ParcelDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Parcel parcel);
 
     @Update

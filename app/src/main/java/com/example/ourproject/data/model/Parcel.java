@@ -1,25 +1,138 @@
 package com.example.ourproject.data.model;
 
+import android.location.Address;
 import android.location.Location;
 
 import androidx.room.Embedded;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverter;
+import androidx.room.TypeConverters;
 
-enum ParcelSize { ENVELOPE, SMALL, LARGE};
+import com.google.firebase.database.Exclude;
+
+import java.util.List;
+
+/*enum ParcelSize { ENVELOPE, SMALL, LARGE};
 enum ParcelWeight { UPTO500GR, UPTOKG, UPTO5KG, UPTO20KG};
-enum ParcelFragile { FRAGILE,NOTFRAGILE};
+enum ParcelFragile { FRAGILE,NOTFRAGILE};*/
 
 @Entity( tableName = "Parcels_table")
 public class Parcel{
+    @Embedded
+    private Memmber addressee;
+
+    private ParcelFragile parcelFragile;
+    @TypeConverters(Parcel.ParcelWeight.class)
+
+    private ParcelWeight parcelWeight;
+    private ParcelSize parcelSize;
+    private Location parcelAddress;
+
+    public Parcel(Memmber addressee, ParcelFragile parcelFragile, ParcelWeight parcelWeight, ParcelSize parcelSize, Location parcelAddress) {
+        this.addressee = addressee;
+        this.parcelFragile = parcelFragile;
+        this.parcelWeight = parcelWeight;
+        this.parcelSize = parcelSize;
+        this.parcelAddress = parcelAddress;
+    }
+
+    public enum ParcelSize {
+        ENVELOPE(0), SMALL(1), LARGE(2);
+        private final Integer code;
+
+        ParcelSize(Integer value) {
+            this.code = value;
+        }
+
+        public Integer getCode() {
+            return code;
+        }
+
+        @TypeConverter
+        public static ParcelSize getType(Integer numeral) {
+            for (ParcelSize ds : values()) {
+                if (ds.code == numeral) {
+                    return ds;
+                }
+            }
+            return null;
+        }
+    }
+
+        public enum ParcelWeight {
+            UPTO500GR(0), UPTOKG(1), UPTO5KG(2), UPTO20KG(3);
+            private final Integer code;
+
+            ParcelWeight(Integer value) {
+                this.code = value;
+            }
+
+            public Integer getCode() {
+                return code;
+            }
+
+            @TypeConverter
+            public static Parcel.ParcelWeight getType(Integer numeral) {
+                for (Parcel.ParcelWeight ds : values()) {
+                    if (ds.code == numeral) {
+                        return ds;
+                    }
+                }
+                return null;
+            }
+        }
+    public enum ParcelFragile {
+        FRAGILE(0), NOTFRAGILE(1);
+        private final Integer code;
+
+        ParcelFragile(Integer value) {
+            this.code = value;
+        }
+
+        public Integer getCode() {
+            return code;
+        }
+
+        @TypeConverter
+        public static Parcel.ParcelFragile getType(Integer numeral) {
+            for (Parcel.ParcelFragile ds : values()) {
+                if (ds.code == numeral) {
+                    return ds;
+                }
+            }
+            return null;
+        }
+    }
+
     @PrimaryKey(autoGenerate = true)
     int Id;
-    @Embedded
-    Memmber addressee;
-    ParcelFragile parcelFragile;
-    ParcelWeight parcelWeight;
-    ParcelSize parcelSize;
-    Location parcelAddress;
+
+    public static class AddressConverter{
+        @TypeConverter
+     public Location toLocation(String s) {
+
+         String sl = s.split(" ")[0];
+         String sg = s.split(" ")[1];
+         Location l =  new Location("providerName");
+         l.setLatitude(Double.parseDouble(sl));
+         l.setLongitude(Double.parseDouble(sg));
+         return l;
+     }
+        @TypeConverter
+     public String fromLocation(Location l){
+         return l.getLatitude()+" "+l.getLongitude();
+     }
+
+
+    }
+
+
+
+
+
+
 
     public int getId() {
         return Id;
