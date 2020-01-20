@@ -12,7 +12,7 @@ import com.example.ourproject.data.model.Parcel;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities= {Parcel.class}, version =  1 ,exportSchema = false)
+@Database(entities= Parcel.class, version =  1 ,exportSchema = false)
 @TypeConverters({Parcel.AddressConverter.class, Parcel.ParcelSize.class, Parcel.ParcelWeight.class, Parcel.ParcelFragile.class})
 public abstract class ParcelRoomDatabase extends RoomDatabase {
 
@@ -24,15 +24,15 @@ public abstract class ParcelRoomDatabase extends RoomDatabase {
             Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
     static ParcelRoomDatabase getDatabase(final Context context) {
-        if (INSTANCE == null) {
-            synchronized (ParcelRoomDatabase.class) {
+        //if (INSTANCE == null) {
+         //   synchronized (ParcelRoomDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            ParcelRoomDatabase.class, "parcel_database")
+                            ParcelRoomDatabase.class, "parcel_database").allowMainThreadQueries()
                             .build();
                 }
-            }
-        }
+           // }
+       // }
         return INSTANCE;
     }
 

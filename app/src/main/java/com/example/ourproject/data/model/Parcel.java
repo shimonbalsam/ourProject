@@ -18,17 +18,19 @@ import java.util.List;
 enum ParcelWeight { UPTO500GR, UPTOKG, UPTO5KG, UPTO20KG};
 enum ParcelFragile { FRAGILE,NOTFRAGILE};*/
 
-@Entity( tableName = "Parcels_table")
-public class Parcel{
+@Entity(tableName = "Parcels_table")
+public class Parcel {
     @Embedded
     private Memmber addressee;
-
+    @TypeConverters(Parcel.ParcelFragile.class)
     private ParcelFragile parcelFragile;
     @TypeConverters(Parcel.ParcelWeight.class)
 
     private ParcelWeight parcelWeight;
+    @TypeConverters(Parcel.ParcelSize.class)
     private ParcelSize parcelSize;
     private Location parcelAddress;
+
 
     public Parcel(Memmber addressee, ParcelFragile parcelFragile, ParcelWeight parcelWeight, ParcelSize parcelSize, Location parcelAddress) {
         this.addressee = addressee;
@@ -59,30 +61,43 @@ public class Parcel{
             }
             return null;
         }
+        @TypeConverter
+        public static Integer GetSize (ParcelSize parcelSize)
+        {
+            return parcelSize.code;
+
+        }
     }
 
-        public enum ParcelWeight {
-            UPTO500GR(0), UPTOKG(1), UPTO5KG(2), UPTO20KG(3);
-            private final Integer code;
+    public enum ParcelWeight {
+        UPTO500GR(0), UPTOKG(1), UPTO5KG(2), UPTO20KG(3);
+        private final Integer code;
 
-            ParcelWeight(Integer value) {
-                this.code = value;
-            }
-
-            public Integer getCode() {
-                return code;
-            }
-
-            @TypeConverter
-            public static Parcel.ParcelWeight getType(Integer numeral) {
-                for (Parcel.ParcelWeight ds : values()) {
-                    if (ds.code == numeral) {
-                        return ds;
-                    }
-                }
-                return null;
-            }
+        ParcelWeight(Integer value) {
+            this.code = value;
         }
+
+        public Integer getCode() {
+            return code;
+        }
+
+        @TypeConverter
+        public static ParcelWeight getType(Integer numeral) {
+            for (Parcel.ParcelWeight ds : values()) {
+                if (ds.code == numeral) {
+                    return ds;
+                }
+            }
+            return null;
+        }
+        @TypeConverter
+        public static Integer GetWeight (ParcelWeight parcelWeight)
+        {
+            return parcelWeight.code;
+
+        }
+    }
+
     public enum ParcelFragile {
         FRAGILE(0), NOTFRAGILE(1);
         private final Integer code;
@@ -96,7 +111,7 @@ public class Parcel{
         }
 
         @TypeConverter
-        public static Parcel.ParcelFragile getType(Integer numeral) {
+        public static ParcelFragile getType(Integer numeral) {
             for (Parcel.ParcelFragile ds : values()) {
                 if (ds.code == numeral) {
                     return ds;
@@ -104,34 +119,36 @@ public class Parcel{
             }
             return null;
         }
+        @TypeConverter
+        public static Integer GetFrigile (ParcelFragile parcelFragile)
+        {
+            return parcelFragile.code;
+
+        }
     }
 
     @PrimaryKey(autoGenerate = true)
     int Id;
 
-    public static class AddressConverter{
+    public static class AddressConverter {
         @TypeConverter
-     public Location toLocation(String s) {
+        public Location toLocation(String s) {
 
-         String sl = s.split(" ")[0];
-         String sg = s.split(" ")[1];
-         Location l =  new Location("providerName");
-         l.setLatitude(Double.parseDouble(sl));
-         l.setLongitude(Double.parseDouble(sg));
-         return l;
-     }
+            String sl = s.split(" ")[0];
+            String sg = s.split(" ")[1];
+            Location l = new Location("providerName");
+            l.setLatitude(Double.parseDouble(sl));
+            l.setLongitude(Double.parseDouble(sg));
+            return l;
+        }
+
         @TypeConverter
-     public String fromLocation(Location l){
-         return l.getLatitude()+" "+l.getLongitude();
-     }
+        public String fromLocation(Location l) {
+            return l.getLatitude() + " " + l.getLongitude();
+        }
 
 
     }
-
-
-
-
-
 
 
     public int getId() {

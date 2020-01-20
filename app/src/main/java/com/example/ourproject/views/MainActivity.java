@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -34,10 +35,11 @@ import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
-
+private List<Parcel> updatParcel;
     private Location location;
     private ParcelViewModel parcelViewModel;
     private Spinner size_tv;
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
 
@@ -46,14 +48,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         parcelViewModel = ViewModelProviders.of(this).get(ParcelViewModel.class);
+        parcelViewModel.get().observe(this, new Observer<List<Parcel>>() {
+            @Override
+            public void onChanged(List<Parcel> parcels) {
+                updatParcel = parcels;
+               // ((TextView) findViewById(R.id.result)).setText(parcels.isEmpty()?"null":parcels.get(parcels.size()-1).getAddressee().getFirstName());
+        }
+        });
 
 
-            requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION},1);
+        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
-                location = getLastBestLocation();
-            }
+            location = getLastBestLocation();
+        }
 
         //size_tv= (Spinner) findViewById(R.id.size);
 
@@ -67,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
             sqliteVersion = cursor.getString(0);
         }*/
 
-        final Button buttonAdd = (Button)findViewById(R.id.buttonAdd);
+        final Button buttonAdd = (Button) findViewById(R.id.buttonAdd);
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,22 +84,25 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        final Button button2 = (Button)findViewById(R.id.button);
+        final Button button2 = (Button) findViewById(R.id.button);
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LiveData<List<Parcel>> l= parcelViewModel.get();
+                //LiveData<List<Parcel>> l = parcelViewModel.get();
 
-                ((TextView)findViewById(R.id.result)).setText(parcelViewModel.get().getValue().get(0).getId());
+          //      ((TextView) findViewById(R.id.result)).setText(parcelViewModel.get().getValue().get(0).getId());
+                ((TextView) findViewById(R.id.result)).setText(updatParcel.get(updatParcel.size()-1).getId()+"");
+
+
             }
         });
 
-        final Button button= (Button)findViewById(R.id.Gps_bt);
+        final Button button = (Button) findViewById(R.id.Gps_bt);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION},1);
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
@@ -127,24 +139,61 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     private void addParcel() {
-        String firstName= ((TextView) findViewById(R.id.editFirstName)).getText().toString();
-        String lastName =((TextView) findViewById(R.id.editLastName)).getText().toString();
+        String firstName = ((TextView) findViewById(R.id.editFirstName)).getText().toString();
+        String lastName = ((TextView) findViewById(R.id.editLastName)).getText().toString();
         int phoneNumber;
         try {
             phoneNumber = Integer.parseInt(((TextView) findViewById(R.id.editPhone)).getText().toString());
-        }
-        catch (NumberFormatException e)
-        {
+        } catch (NumberFormatException e) {
             phoneNumber = 0;
         }
-        Parcel.ParcelFragile parcelFragile = (Parcel.ParcelFragile) ((Spinner) findViewById(R.id.frigile)).getSelectedItem();
-        Parcel.ParcelWeight parcelWeight = (Parcel.ParcelWeight) ((Spinner) findViewById(R.id.Weight)).getSelectedItem();
-        Parcel.ParcelSize parcelSize = (Parcel.ParcelSize) ((Spinner) findViewById(R.id.size)).getSelectedItem();
-        Memmber memmber = new Memmber(firstName,lastName,phoneNumber,location);
-        Parcel parcel = new Parcel(memmber,parcelFragile,parcelWeight,parcelSize,location);
-    parcelViewModel.addParcel(parcel);
+        Parcel.ParcelFragile parcelFragile;
+        switch (((Spinner) findViewById(R.id.frigile)).getSelectedItemPosition()) {
+            case 0:
+                parcelFragile = Parcel.ParcelFragile.FRAGILE;
+                break;
+            case 1:
+                parcelFragile = Parcel.ParcelFragile.NOTFRAGILE;
+                default:
+                    parcelFragile = null;
+        }
+        Parcel.ParcelWeight parcelWeight;
+        switch (((Spinner) findViewById(R.id.Weight)).getSelectedItemPosition())
+        {
+            case 0:
+                parcelWeight = Parcel.ParcelWeight.UPTO500GR;
+                break;
+            case 1:
+                parcelWeight = Parcel.ParcelWeight.UPTOKG;
+                break;
+            case 2:
+                parcelWeight = Parcel.ParcelWeight.UPTO5KG;
+                break;
+            case 3:
+                parcelWeight = Parcel.ParcelWeight.UPTO20KG;
+                break;
+                default:
+                    parcelWeight = null;
+        }
+        Parcel.ParcelSize parcelSize;
+        switch (((Spinner) findViewById(R.id.size)).getSelectedItemPosition())
+        {
+            case 0:
+                parcelSize = Parcel.ParcelSize.ENVELOPE;
+                break;
+            case 1:
+                parcelSize = Parcel.ParcelSize.SMALL;
+                break;
+            case 2:
+                parcelSize = Parcel.ParcelSize.LARGE;
+                default:
+                    parcelSize = null;
+
+        }
+        Memmber memmber = new Memmber(firstName, lastName, phoneNumber, location);
+        Parcel parcel = new Parcel(memmber, parcelFragile, parcelWeight, parcelSize, location);
+        parcelViewModel.addParcel(parcel);
     }
 
 
@@ -152,8 +201,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode==1){
-            if(grantResults[0]==PackageManager.PERMISSION_GRANTED){
+        if (requestCode == 1) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 location = getLastBestLocation();
 
             }
@@ -177,24 +226,24 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
 
-            Location locationNet = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        Location locationNet = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
-            long GPSLocationTime = 0;
-            if (null != locationGPS) {
-                GPSLocationTime = locationGPS.getTime();
-            }
+        long GPSLocationTime = 0;
+        if (null != locationGPS) {
+            GPSLocationTime = locationGPS.getTime();
+        }
 
-            long NetLocationTime = 0;
+        long NetLocationTime = 0;
 
-            if (null != locationNet) {
-                NetLocationTime = locationNet.getTime();
-            }
+        if (null != locationNet) {
+            NetLocationTime = locationNet.getTime();
+        }
 
-            if (0 < GPSLocationTime - NetLocationTime) {
-                return locationGPS;
-            } else {
-                return locationNet;
-            }
+        if (0 < GPSLocationTime - NetLocationTime) {
+            return locationGPS;
+        } else {
+            return locationNet;
+        }
 
     }
 }
