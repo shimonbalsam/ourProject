@@ -12,6 +12,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -35,7 +36,7 @@ import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
-private List<Parcel> updatParcel;
+    private List<Parcel> updatParcel;
     private Location location;
     private ParcelViewModel parcelViewModel;
     private Spinner size_tv;
@@ -52,8 +53,8 @@ private List<Parcel> updatParcel;
             @Override
             public void onChanged(List<Parcel> parcels) {
                 updatParcel = parcels;
-               // ((TextView) findViewById(R.id.result)).setText(parcels.isEmpty()?"null":parcels.get(parcels.size()-1).getAddressee().getFirstName());
-        }
+                // ((TextView) findViewById(R.id.result)).setText(parcels.isEmpty()?"null":parcels.get(parcels.size()-1).getAddressee().getFirstName());
+            }
         });
 
 
@@ -84,14 +85,22 @@ private List<Parcel> updatParcel;
 
             }
         });
+        final Button buttonList = (Button) findViewById(R.id.buttenlist);
+        buttonList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ParcelsList.class);
+                startActivity(intent);
+            }
+        });
         final Button button2 = (Button) findViewById(R.id.button);
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //LiveData<List<Parcel>> l = parcelViewModel.get();
 
-          //      ((TextView) findViewById(R.id.result)).setText(parcelViewModel.get().getValue().get(0).getId());
-                ((TextView) findViewById(R.id.result)).setText(updatParcel.get(updatParcel.size()-1).getId()+"");
+                //      ((TextView) findViewById(R.id.result)).setText(parcelViewModel.get().getValue().get(0).getId());
+                ((TextView) findViewById(R.id.result)).setText(updatParcel.get(updatParcel.size() - 1).getId() + "");
 
 
             }
@@ -155,12 +164,11 @@ private List<Parcel> updatParcel;
                 break;
             case 1:
                 parcelFragile = Parcel.ParcelFragile.NOTFRAGILE;
-                default:
-                    parcelFragile = null;
+            default:
+                parcelFragile = null;
         }
         Parcel.ParcelWeight parcelWeight;
-        switch (((Spinner) findViewById(R.id.Weight)).getSelectedItemPosition())
-        {
+        switch (((Spinner) findViewById(R.id.Weight)).getSelectedItemPosition()) {
             case 0:
                 parcelWeight = Parcel.ParcelWeight.UPTO500GR;
                 break;
@@ -173,12 +181,11 @@ private List<Parcel> updatParcel;
             case 3:
                 parcelWeight = Parcel.ParcelWeight.UPTO20KG;
                 break;
-                default:
-                    parcelWeight = null;
+            default:
+                parcelWeight = null;
         }
         Parcel.ParcelSize parcelSize;
-        switch (((Spinner) findViewById(R.id.size)).getSelectedItemPosition())
-        {
+        switch (((Spinner) findViewById(R.id.size)).getSelectedItemPosition()) {
             case 0:
                 parcelSize = Parcel.ParcelSize.ENVELOPE;
                 break;
@@ -187,8 +194,8 @@ private List<Parcel> updatParcel;
                 break;
             case 2:
                 parcelSize = Parcel.ParcelSize.LARGE;
-                default:
-                    parcelSize = null;
+            default:
+                parcelSize = null;
 
         }
         Memmber memmber = new Memmber(firstName, lastName, phoneNumber, location);
