@@ -17,6 +17,8 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
@@ -32,6 +34,7 @@ import com.example.ourproject.data.model.Memmber;
 import com.example.ourproject.data.model.Parcel;
 import com.example.ourproject.viewmodel.ParcelViewModel;
 
+import java.io.IOException;
 import java.util.List;
 
 
@@ -40,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private Location location;
     private ParcelViewModel parcelViewModel;
     private Spinner size_tv;
+    Geocoder geocoder;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -47,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        geocoder = new Geocoder(this);
 
         parcelViewModel = ViewModelProviders.of(this).get(ParcelViewModel.class);
         parcelViewModel.get().observe(this, new Observer<List<Parcel>>() {
@@ -81,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 addParcel();
 
             }
@@ -200,7 +206,18 @@ public class MainActivity extends AppCompatActivity {
         }
         Memmber memmber = new Memmber(firstName, lastName, phoneNumber, location);
         Parcel parcel = new Parcel(memmber, parcelFragile, parcelWeight, parcelSize, location);
+        if (location != null) {
+            try {
+                List<Address> l = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                if (!l.isEmpty())
+                    parcel.setParcelAddressAuto(l.get(0) + "");
+
+            } catch (IOException e) {
+
+            }
+        }
         parcelViewModel.addParcel(parcel);
+
     }
 
 

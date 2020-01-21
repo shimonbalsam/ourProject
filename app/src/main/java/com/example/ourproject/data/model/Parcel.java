@@ -1,6 +1,7 @@
 package com.example.ourproject.data.model;
 
 import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 
 import androidx.room.Embedded;
@@ -30,6 +31,16 @@ public class Parcel {
     @TypeConverters(Parcel.ParcelSize.class)
     private ParcelSize parcelSize;
     private Location parcelAddress;
+
+    public String getParcelAddressAuto() {
+        return parcelAddressAuto;
+    }
+
+    public void setParcelAddressAuto(String parcelAddressAuto) {
+        this.parcelAddressAuto = parcelAddressAuto;
+    }
+
+    private String parcelAddressAuto;
 
 
     public Parcel(Memmber addressee, ParcelFragile parcelFragile, ParcelWeight parcelWeight, ParcelSize parcelSize, Location parcelAddress) {
