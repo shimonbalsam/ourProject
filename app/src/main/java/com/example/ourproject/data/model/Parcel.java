@@ -42,6 +42,8 @@ public class Parcel {
 
     private String parcelAddressAuto;
 
+    public Parcel() {
+    }
 
     public Parcel(Memmber addressee, ParcelFragile parcelFragile, ParcelWeight parcelWeight, ParcelSize parcelSize, Location parcelAddress) {
         this.addressee = addressee;
@@ -72,9 +74,9 @@ public class Parcel {
             }
             return null;
         }
+
         @TypeConverter
-        public static Integer GetSize (ParcelSize parcelSize)
-        {
+        public static Integer GetSize(ParcelSize parcelSize) {
             return parcelSize.code;
 
         }
@@ -101,9 +103,9 @@ public class Parcel {
             }
             return null;
         }
+
         @TypeConverter
-        public static Integer GetWeight (ParcelWeight parcelWeight)
-        {
+        public static Integer GetWeight(ParcelWeight parcelWeight) {
             return parcelWeight.code;
 
         }
@@ -130,14 +132,13 @@ public class Parcel {
             }
             return null;
         }
+
         @TypeConverter
-        public static Integer GetFrigile (ParcelFragile parcelFragile)
-        {
+        public static Integer GetFrigile(ParcelFragile parcelFragile) {
             return parcelFragile.code;
 
         }
     }
-
     @PrimaryKey(autoGenerate = true)
     int Id;
 
@@ -155,7 +156,7 @@ public class Parcel {
 
         @TypeConverter
         public String fromLocation(Location l) {
-            return l.getLatitude() + " " + l.getLongitude();
+            return l==null? "":l.getLatitude() + " " + l.getLongitude();
         }
 
 

@@ -42,4 +42,8 @@ public class ParcelListViewModel extends AndroidViewModel {
     public LiveData<List<Parcel>> get() {
         return mRepository.getAllParcels();
     }
+
+    public void deleteAll() {
+        mRepository.del();
+    }
 }

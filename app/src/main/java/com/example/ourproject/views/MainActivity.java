@@ -1,8 +1,10 @@
 package com.example.ourproject.views;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -23,7 +25,9 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -32,26 +36,29 @@ import android.widget.TextView;
 import com.example.ourproject.R;
 import com.example.ourproject.data.model.Memmber;
 import com.example.ourproject.data.model.Parcel;
+import com.example.ourproject.data.repositories.FireBase;
 import com.example.ourproject.viewmodel.ParcelViewModel;
 
 import java.io.IOException;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Fragment {
     private List<Parcel> updatParcel;
     private Location location;
     private ParcelViewModel parcelViewModel;
     private Spinner size_tv;
     Geocoder geocoder;
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    @Override
 
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        geocoder = new Geocoder(this);
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        View root = inflater.inflate(R.layout.activity_main, container, false);
+        geocoder = new Geocoder(root.getContext());
+
+
 
         parcelViewModel = ViewModelProviders.of(this).get(ParcelViewModel.class);
         parcelViewModel.get().observe(this, new Observer<List<Parcel>>() {
@@ -81,6 +88,122 @@ public class MainActivity extends AppCompatActivity {
         if (cursor.moveToNext()) {
             sqliteVersion = cursor.getString(0);
         }*/
+
+        final Button buttonAdd = (Button) root.findViewById(R.id.buttonAdd);
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                addParcel(root);
+
+            }
+        });
+
+        final Button button2 = (Button) root.findViewById(R.id.button);
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //LiveData<List<Parcel>> l = parcelViewModel.get();
+
+                //      ((TextView) findViewById(R.id.result)).setText(parcelViewModel.get().getValue().get(0).getId());
+                ((TextView) root.findViewById(R.id.result)).setText(updatParcel.get(updatParcel.size() - 1).getId() + "");
+
+
+            }
+        });
+
+        final Button button = (Button) root.findViewById(R.id.Gps_bt);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+                    /*Thread thread = new Thread(){
+                        public void run(){
+                            location = getLastBestLocation();                        }
+                    };
+                    try {
+                        thread.join();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    thread.start();*/
+
+
+                    //    location = getLastBestLocation();
+                    if (location == null)
+                        button.setText("no gps");
+                    else{
+                        try {
+                            List<Address> l = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                            if (!l.isEmpty())
+                                button.setText(l.get(0).getAddressLine(0) + "");
+
+                        } catch (IOException e) {
+
+                        }
+                    }
+
+                }
+            }
+        });
+
+
+       /* final Button press = findViewById(R.id.pressButton);
+        final TextView resultsTextView = findViewById(R.id.showInput);
+        final EditText inputText = findViewById(R.id.editText);
+
+        press.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                resultsTextView.setText("hello "+ inputText.getText());
+            }
+        });*/
+        return root;
+    }
+
+
+
+
+    /*protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        geocoder = new Geocoder(this);
+
+
+
+        parcelViewModel = ViewModelProviders.of(this).get(ParcelViewModel.class);
+        parcelViewModel.get().observe(this, new Observer<List<Parcel>>() {
+            @Override
+            public void onChanged(List<Parcel> parcels) {
+                updatParcel = parcels;
+                // ((TextView) findViewById(R.id.result)).setText(parcels.isEmpty()?"null":parcels.get(parcels.size()-1).getAddressee().getFirstName());
+            }
+        });
+
+
+        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            location = getLastBestLocation();
+        }
+
+        //size_tv= (Spinner) findViewById(R.id.size);
+
+
+
+        *//*String query = "select sqlite_version() AS sqlite_version";
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(":memory:", null);
+        Cursor cursor = db.rawQuery(query, null);
+        String sqliteVersion = "";
+        if (cursor.moveToNext()) {
+            sqliteVersion = cursor.getString(0);
+        }*//*
 
         final Button buttonAdd = (Button) findViewById(R.id.buttonAdd);
         buttonAdd.setOnClickListener(new View.OnClickListener() {
@@ -121,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
-                    /*Thread thread = new Thread(){
+                    *//*Thread thread = new Thread(){
                         public void run(){
                             location = getLastBestLocation();                        }
                     };
@@ -130,17 +253,29 @@ public class MainActivity extends AppCompatActivity {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    thread.start();*/
+                    thread.start();*//*
 
-                    location = getLastBestLocation();
-                    button.setText(/*" "+location.getLongitude()+" , "+location.getLatitude()+" "+*/location.toString());
+
+                //    location = getLastBestLocation();
+                    if (location == null)
+                        button.setText("no gps");
+                    else{
+                        try {
+                            List<Address> l = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                            if (!l.isEmpty())
+                                button.setText(l.get(0).getAddressLine(0) + "");
+
+                        } catch (IOException e) {
+
+                        }
+                    }
 
                 }
             }
         });
 
 
-       /* final Button press = findViewById(R.id.pressButton);
+       *//* final Button press = findViewById(R.id.pressButton);
         final TextView resultsTextView = findViewById(R.id.showInput);
         final EditText inputText = findViewById(R.id.editText);
 
@@ -150,21 +285,22 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 resultsTextView.setText("hello "+ inputText.getText());
             }
-        });*/
+        });*//*
     }
+*/
 
+    private void addParcel(View root) {
 
-    private void addParcel() {
-        String firstName = ((TextView) findViewById(R.id.editFirstName)).getText().toString();
-        String lastName = ((TextView) findViewById(R.id.editLastName)).getText().toString();
+        String firstName = ((TextView) root.findViewById(R.id.editFirstName)).getText().toString();
+        String lastName = ((TextView) root.findViewById(R.id.editLastName)).getText().toString();
         int phoneNumber;
         try {
-            phoneNumber = Integer.parseInt(((TextView) findViewById(R.id.editPhone)).getText().toString());
+            phoneNumber = Integer.parseInt(((TextView) root.findViewById(R.id.editPhone)).getText().toString());
         } catch (NumberFormatException e) {
             phoneNumber = 0;
         }
         Parcel.ParcelFragile parcelFragile;
-        switch (((Spinner) findViewById(R.id.frigile)).getSelectedItemPosition()) {
+        switch (((Spinner) root.findViewById(R.id.frigile)).getSelectedItemPosition()) {
             case 0:
                 parcelFragile = Parcel.ParcelFragile.FRAGILE;
                 break;
@@ -174,7 +310,7 @@ public class MainActivity extends AppCompatActivity {
                 parcelFragile = null;
         }
         Parcel.ParcelWeight parcelWeight;
-        switch (((Spinner) findViewById(R.id.Weight)).getSelectedItemPosition()) {
+        switch (((Spinner) root.findViewById(R.id.Weight)).getSelectedItemPosition()) {
             case 0:
                 parcelWeight = Parcel.ParcelWeight.UPTO500GR;
                 break;
@@ -191,7 +327,7 @@ public class MainActivity extends AppCompatActivity {
                 parcelWeight = null;
         }
         Parcel.ParcelSize parcelSize;
-        switch (((Spinner) findViewById(R.id.size)).getSelectedItemPosition()) {
+        switch (((Spinner) root.findViewById(R.id.size)).getSelectedItemPosition()) {
             case 0:
                 parcelSize = Parcel.ParcelSize.ENVELOPE;
                 break;
@@ -210,7 +346,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 List<Address> l = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
                 if (!l.isEmpty())
-                    parcel.setParcelAddressAuto(l.get(0) + "");
+                    parcel.setParcelAddressAuto(l.get(0).getAddressLine(0) + "");
 
             } catch (IOException e) {
 
@@ -236,9 +372,9 @@ public class MainActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     private Location getLastBestLocation() {
-        LocationManager mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        LocationManager mLocationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         @SuppressLint("MissingPermission") Location locationGPS = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (getActivity().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && getActivity().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    Activity#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -266,7 +402,10 @@ public class MainActivity extends AppCompatActivity {
         if (0 < GPSLocationTime - NetLocationTime) {
             return locationGPS;
         } else {
+
             return locationNet;
+
+
         }
 
     }

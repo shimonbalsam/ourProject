@@ -22,12 +22,14 @@ public class ParcelRepository {
         mParcelDao = db.parcelDao();
         mAllParcels = mParcelDao.getAllParcel();
     }
-    public void del(){
+
+    public void del() {
         mParcelDao.deleteAll();
     }
 
 
     private static ParcelRepository instance;
+
     public static ParcelRepository getInstance(Application application) {
         if (instance == null)
             instance = new ParcelRepository(application);
@@ -49,9 +51,10 @@ public class ParcelRepository {
             mParcelDao.insert(parcel);
         });
     }*/
-    public void insert (Parcel parcel)
-    {
+    public void insert(Parcel parcel) {
         mParcelDao.insert(parcel);
+        FireBase fireBase = new FireBase();
+        fireBase.insertFireBase(parcel);
     }
 
 
