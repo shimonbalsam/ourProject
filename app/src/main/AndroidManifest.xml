@@ -19,16 +19,15 @@
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
 
-        <activity android:name=".views.MainActivity">
+        <activity android:name=".views.MainFragment">
 
         </activity>
-        <activity android:name=".views.ParcelsList" />
+        <activity android:name=".views.ParcelsListFragment" />
 
     </application>
 

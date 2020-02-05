@@ -43,7 +43,7 @@ import java.io.IOException;
 import java.util.List;
 
 
-public class MainActivity extends Fragment {
+public class MainFragment extends Fragment {
     private List<Parcel> updatParcel;
     private Location location;
     private ParcelViewModel parcelViewModel;
@@ -99,7 +99,7 @@ public class MainActivity extends Fragment {
             }
         });
 
-        final Button button2 = (Button) root.findViewById(R.id.button);
+        /*final Button button2 = (Button) root.findViewById(R.id.button);
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,7 +110,7 @@ public class MainActivity extends Fragment {
 
 
             }
-        });
+        });*/
 
         final Button button = (Button) root.findViewById(R.id.Gps_bt);
         button.setOnClickListener(new View.OnClickListener() {
@@ -218,7 +218,7 @@ public class MainActivity extends Fragment {
         buttonList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ParcelsList.class);
+                Intent intent = new Intent(MainFragment.this, ParcelsListFragment.class);
                 startActivity(intent);
             }
         });

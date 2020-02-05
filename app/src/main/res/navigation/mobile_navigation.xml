@@ -8,13 +8,13 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.example.ourproject.views.MainActivity"
+        android:name="com.example.ourproject.views.MainFragment"
         android:label="Add parcel"
         tools:layout="@layout/activity_main" />
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="com.example.ourproject.views.ParcelsList"
+        android:name="com.example.ourproject.views.ParcelsListFragment"
         android:label="Parcel list"
         tools:layout="@layout/parcels_list" />
     <fragment

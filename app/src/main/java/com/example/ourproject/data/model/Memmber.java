@@ -53,12 +53,16 @@ public class Memmber {
         @TypeConverter
         public Location toLocation(String s) {
 
-            String sl = s.split(" ")[0];
-            String sg = s.split(" ")[1];
-            Location l =  new Location("providerName");
-            l.setLatitude(Double.parseDouble(sl));
-            l.setLongitude(Double.parseDouble(sg));
-            return l;
+            if(s.length()>0){
+                String sl = s.split(" ")[0];
+                String sg = s.split(" ")[1];
+                Location l = new Location("providerName");
+                l.setLatitude(Double.parseDouble(sl));
+                l.setLongitude(Double.parseDouble(sg));
+                return l;
+            }
+            else
+                return null;
         }
         @TypeConverter
         public String fromLocation(Location l){

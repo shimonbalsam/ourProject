@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ParcelsList extends Fragment {
+public class ParcelsListFragment extends Fragment {
     ParcelListViewModel parcelListViewModel;
     List<Parcel> parcelsView;
 
@@ -90,7 +90,7 @@ public class ParcelsList extends Fragment {
             @Override
             public void onChanged(List<Parcel> parcels) {
                 parcelsView = parcels;
-                recyclerView.setLayoutManager(new LinearLayoutManager(ParcelsList.this));
+                recyclerView.setLayoutManager(new LinearLayoutManager(ParcelsListFragment.this));
                 RecyclerViewAdater recyclerViewAdater = new RecyclerViewAdater(parcelsView);
                 recyclerView.setAdapter(recyclerViewAdater);
                 // ((TextView) findViewById(R.id.result)).setText(parcels.isEmpty()?"null":parcels.get(parcels.size()-1).getAddressee().getFirstName());
