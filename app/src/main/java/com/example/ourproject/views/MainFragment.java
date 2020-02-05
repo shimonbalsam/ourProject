@@ -13,6 +13,9 @@ import androidx.lifecycle.ViewModelProviders;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Application;
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -23,8 +26,10 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +37,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ourproject.R;
 import com.example.ourproject.data.model.Memmber;
@@ -41,6 +47,8 @@ import com.example.ourproject.viewmodel.ParcelViewModel;
 
 import java.io.IOException;
 import java.util.List;
+
+import static androidx.core.content.ContextCompat.checkSelfPermission;
 
 
 public class MainFragment extends Fragment {
@@ -54,6 +62,7 @@ public class MainFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
 
         View root = inflater.inflate(R.layout.activity_main, container, false);
         geocoder = new Geocoder(root.getContext());
@@ -72,7 +81,7 @@ public class MainFragment extends Fragment {
 
         requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && getActivity().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
             location = getLastBestLocation();
         }
@@ -98,6 +107,37 @@ public class MainFragment extends Fragment {
 
             }
         });
+        requestPermissions(new String[]{Manifest.permission.SEND_SMS}, 2);
+
+        final Button buttonIntebt = (Button) root.findViewById(R.id.newIntent);
+        buttonIntebt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PendingIntent sentPI = PendingIntent.getBroadcast(getActivity(),0,new Intent("SMS_SENT"),0);
+                PendingIntent deliveredPI = PendingIntent.getBroadcast(getActivity(),0,new Intent("SMS_DELIVERED"),0);
+
+
+
+
+                if(checkSelfPermission(getActivity(), Manifest.permission.SEND_SMS)==PackageManager.PERMISSION_GRANTED) {
+                    SmsManager sms = SmsManager.getDefault();
+                    sms.sendTextMessage("+972526340324", null, "ffff", sentPI,
+                            deliveredPI);
+                }
+               // SmsManager smsManager = SmsManager.getDefault();
+               // smsManager.sendTextMessage("+972526340324","+972526340324", "hello", null);
+
+               /* try {
+                    Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.ynet.co.il/home/0,7340,L-2,00.html"));
+                    startActivity(myIntent);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(getActivity(), "No application can handle this request."
+                            + " Please install a webbrowser",  Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }*/
+
+            }
+        });
 
         /*final Button button2 = (Button) root.findViewById(R.id.button);
         button2.setOnClickListener(new View.OnClickListener() {
@@ -117,7 +157,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+               // requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
@@ -134,6 +174,8 @@ public class MainFragment extends Fragment {
 
 
                     //    location = getLastBestLocation();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && getActivity().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                        location = getLastBestLocation();}
                     if (location == null)
                         button.setText("no gps");
                     else{

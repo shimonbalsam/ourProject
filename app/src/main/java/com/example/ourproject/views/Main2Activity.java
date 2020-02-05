@@ -49,7 +49,7 @@ public class Main2Activity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-       MenuItem menuItem = navigationView.getMenu().getItem(2).getSubMenu().getItem(0);
+       MenuItem menuItem = navigationView.getMenu().getItem(4).getSubMenu().getItem(0);
        menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
            @Override
            public boolean onMenuItemClick(MenuItem item) {
