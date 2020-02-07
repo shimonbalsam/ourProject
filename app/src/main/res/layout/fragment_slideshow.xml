@@ -49,6 +49,19 @@
             android:ems="10"
             android:inputType="phone" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="enter number of sms to send:"
+            />
+
+        <EditText
+            android:id="@+id/editnumbersms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="2"
+            android:inputType="phone" />
+
 
 
         <Button

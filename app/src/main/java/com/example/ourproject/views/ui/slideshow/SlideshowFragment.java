@@ -1,12 +1,16 @@
 package com.example.ourproject.views.ui.slideshow;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.telephony.SmsManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,10 +55,41 @@ public class SlideshowFragment extends Fragment {
                 if(checkSelfPermission(getActivity(), Manifest.permission.SEND_SMS)== PackageManager.PERMISSION_GRANTED) {
                     SmsManager sms = SmsManager.getDefault();
                     String massage = ((TextView) root.findViewById(R.id.editmassage)).getText().toString();
+                    //String massage ="gdgdgdg\n\n\n\nsdfasd\n\nfdsgd";
                     String number = ((TextView) root.findViewById(R.id.editPhonesms)).getText().toString();
-                    sms.sendTextMessage(number, null, massage, sentPI,
-                            deliveredPI);
+
+                    int numbersms = Integer.parseInt(((TextView) root.findViewById(R.id.editnumbersms)).getText().toString());
+                    int numbersms2 = numbersms;
+                    while(numbersms>0) {
+                        sms.sendTextMessage(number, null, massage+"\nזוהי הודעה מספר: " +(numbersms2+1-numbersms) , sentPI,
+                                deliveredPI);
+                        numbersms--;
+                    }
+                    Context context = getActivity().getApplicationContext();
+                    CharSequence text = numbersms2+" sms sent";
+                    int duration = Toast.LENGTH_SHORT;
+
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
                 }
+              /*  Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                startActivityForResult(intent,2,null);
+*/
+               /* protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+                    // If the request went well (OK) and the request was PICK_CONTACT_REQUEST
+                    if (resultCode == Activity.RESULT_OK && requestCode == PICK_CONTACT_REQUEST) {
+                        // Perform a query to the contact's content provider for the contact's name
+                        Cursor cursor = getContentResolver().query(data.getData(),
+                                new String[] {ContactsContract.Contacts.DISPLAY_NAME}, null, null, null);
+                        if (cursor.moveToFirst()) { // True if the cursor is not empty
+                                      int columnIndex = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
+                                      String name = cursor.getString(columnIndex);
+                                      // Do something with the selected contact's name...
+                            }
+                    }
+                }*/
+
+
 
 
 
@@ -84,7 +119,7 @@ public class SlideshowFragment extends Fragment {
                 sendIntent.putExtra(Intent.EXTRA_TEXT, "This text from my app.");
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
-                sendIntent.setPackage("com.whatsapp");
+               sendIntent.setPackage("com.whatsapp");
                 startActivity(sendIntent);
             }
         });
